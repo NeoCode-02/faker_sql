@@ -7,6 +7,7 @@ from psycopg2.extras import RealDictCursor
 from fastapi import FastAPI, Request, HTTPException, Query
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel
 import uvicorn
 
@@ -83,7 +84,7 @@ def generate_users(
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
+def index(request: Request):
     """Render the main form."""
     with get_db_connection() as conn:
         with conn.cursor() as cursor:
@@ -103,7 +104,7 @@ async def index(request: Request):
 
 
 @app.get("/generate", response_class=HTMLResponse)
-async def generate_get(
+def generate_get(
     request: Request,
     locale: str = Query("uz_UZ"),
     seed: int = Query(12345),
@@ -111,7 +112,7 @@ async def generate_get(
     batch_index: int = Query(0),
 ):
     """Generate fake users via GET for simplicity."""
-    return await generate_users_view(request, locale, seed, batch_index, batch_size)
+    return generate_users_view(request, locale, seed, batch_index, batch_size)
 
 
 @app.post("/generate", response_class=HTMLResponse)
@@ -129,10 +130,10 @@ async def generate_post(request: Request):
     else:
         batch_index = 0
 
-    return await generate_users_view(request, locale, seed, batch_index, batch_size)
+    return await run_in_threadpool(generate_users_view, request, locale, seed, batch_index, batch_size)
 
 
-async def generate_users_view(
+def generate_users_view(
     request: Request,
     locale: str,
     seed: int,
@@ -165,7 +166,7 @@ async def generate_users_view(
 
 
 @app.get("/benchmark", response_class=HTMLResponse)
-async def benchmark(request: Request, size: int = Query(10000)):
+def benchmark(request: Request, size: int = Query(1000)):
     """Run benchmark test."""
     locale = "uz_UZ"
     seed = 12345
