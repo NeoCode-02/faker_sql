@@ -13,7 +13,6 @@ RUN pip install --no-cache-dir \
 COPY app /app/app
 
 ENV PYTHONPATH=/app
-ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/faker
 
 EXPOSE 8000
 
