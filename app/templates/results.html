@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Users - Faker SQL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 0; margin-bottom: 1.5rem; }
+        .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .table-container { overflow-x: auto; }
+        .table th { background: #f8f9fa; font-weight: 600; white-space: nowrap; }
+        .coord { font-family: monospace; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1">Generated Users</h4>
+                <p class="mb-0 small">Locale: <strong>{{ locale }}</strong> | Seed: <strong>{{ seed }}</strong> | Batch: <strong>{{ batch_index }}</strong></p>
+            </div>
+            <div>
+                <a href="/" class="btn btn-outline-light">New Session</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <form action="/generate" method="POST" class="d-flex gap-2 align-items-center flex-wrap">
+                    <input type="hidden" name="locale" value="{{ locale }}">
+                    <input type="hidden" name="seed" value="{{ seed }}">
+                    <input type="hidden" name="batch_size" value="{{ batch_size }}">
+                    <input type="hidden" name="batch_index" value="{{ batch_index }}">
+                    <button type="submit" name="action" value="generate" class="btn btn-primary">Generate (reset)</button>
+                </form>
+
+                <form action="/generate" method="POST" class="d-flex gap-2 align-items-center flex-wrap">
+                    <input type="hidden" name="locale" value="{{ locale }}">
+                    <input type="hidden" name="seed" value="{{ seed }}">
+                    <input type="hidden" name="batch_size" value="{{ batch_size }}">
+                    <input type="hidden" name="batch_index" value="{{ batch_index }}">
+                    <button type="submit" name="action" value="next" class="btn btn-secondary">Next Batch</button>
+                </form>
+                
+                <span class="badge bg-success">Generated in {{ "%.3f"|format(elapsed) }}s</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-container">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Height</th>
+                            <th>Weight</th>
+                            <th>Eye Color</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.row_index + 1 }}</td>
+                            <td>{{ user.full_name }}</td>
+                            <td style="max-width: 250px;">{{ user.address }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.height }} cm</td>
+                            <td>{{ user.weight }} kg</td>
+                            <td>{{ user.eye_color }}</td>
+                            <td class="coord">{{ "%.4f"|format(user.latitude) }}</td>
+                            <td class="coord">{{ "%.4f"|format(user.longitude) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="text-muted text-center mt-3 mb-4">
+            Showing {{ users|length }} users | <a href="/benchmark">Run Benchmark</a>
+        </div>
+    </div>
+</body>
+</html>
