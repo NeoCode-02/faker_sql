@@ -166,8 +166,18 @@ def generate_users_view(
 
 
 @app.get("/benchmark", response_class=HTMLResponse)
-def benchmark(request: Request, size: int = Query(1000)):
-    """Run benchmark test."""
+def benchmark(request: Request, size: int = Query(None)):
+    """Render benchmark form or run benchmark if size provided."""
+    if size is None:
+        return templates.TemplateResponse(
+            "benchmark.html",
+            {
+                "request": request,
+                "has_result": False,
+                "last_size": "",
+            },
+        )
+
     locale = "uz_UZ"
     seed = 12345
 
@@ -181,10 +191,12 @@ def benchmark(request: Request, size: int = Query(1000)):
         "benchmark.html",
         {
             "request": request,
+            "has_result": True,
             "total_users": size,
             "elapsed": elapsed,
             "users_per_sec": users_per_sec,
             "sample_users": users[:5],
+            "last_size": size,
         },
     )
 

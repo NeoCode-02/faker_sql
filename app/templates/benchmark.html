@@ -16,18 +16,27 @@
 </head>
 <body>
     <div class="header">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="mb-1">Benchmark Results</h4>
-                <p class="mb-0 small">Performance test</p>
-            </div>
-            <div>
-                <a href="/" class="btn btn-outline-light">Back to Form</a>
-            </div>
+        <div class="container">
+            <h4 class="mb-1">Benchmark</h4>
+            <p class="mb-0 small">Measure generator throughput</p>
         </div>
     </div>
 
     <div class="container">
+        <div class="card p-3 mb-3">
+            <h5 class="mb-3">Run Benchmark</h5>
+            <form action="/benchmark" method="GET" class="row g-3">
+                <div class="col-auto">
+                    <label class="form-label">Batch Size</label>
+                    <input type="number" name="size" class="form-control" placeholder="e.g. 10000" min="100" max="1000000" value="{{ last_size }}" required>
+                </div>
+                <div class="col-auto d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Run Benchmark</button>
+                </div>
+            </form>
+        </div>
+
+        {% if has_result %}
         <div class="row mb-4">
             <div class="col-md-4">
                 <div class="card stat-card">
@@ -47,19 +56,6 @@
                     <div class="stat-label">Users/Second</div>
                 </div>
             </div>
-        </div>
-
-        <div class="card p-3 mb-3">
-            <h5 class="mb-3">Run Custom Benchmark</h5>
-            <form action="/benchmark" method="GET" class="row g-3">
-                <div class="col-auto">
-                    <label class="form-label">Batch Size</label>
-                    <input type="number" name="size" class="form-control" value="10000" min="100" max="1000000">
-                </div>
-                <div class="col-auto d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Run Benchmark</button>
-                </div>
-            </form>
         </div>
 
         <div class="card">
@@ -85,6 +81,7 @@
                 </tbody>
             </table>
         </div>
+        {% endif %}
     </div>
 </body>
 </html>

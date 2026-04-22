@@ -12,8 +12,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- =============================================================================
 
 INSERT INTO locales (code, name, country, phone_format, address_format) VALUES
-('uz_UZ', 'Uzbekistan', 'Uzbekistan', '+998 {areaCode} {number}', '{street}, {city} {postal}, {country}'),
-('ru_RU', 'Russia', 'Russia', '+7 ({areaCode}) {number}', '{street}, {city} {postal}, {country}');
+('uz_UZ', 'Uzbek', 'Uzbekistan', '+998 {areaCode} {number}', '{street}, {city} {postal}, {country}'),
+('ru_RU', 'Russian', 'Russia', '+7 ({areaCode}) {number}', '{street}, {city} {postal}, {country}');
 
 -- =============================================================================
 -- Uzbek Names (first, last, middle) - 500+ entries
